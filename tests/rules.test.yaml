@@ -1,0 +1,16 @@
+test_metadata:
+  type: config
+  name: rules
+  description: add and modify rules
+
+rules:
+  -
+    name: AWSManagedRulesAdminProtectionRuleSet
+    priority: 300
+    conditional: true
+  -
+    name: IPSetBlacklist
+    enabled: false
+  -
+    name: IPSetWhitelist
+    enabled: false

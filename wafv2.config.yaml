@@ -1,0 +1,6 @@
+cloudwatch:
+  enabled: true
+  samples: true
+  metric_name_prefix: ${EnvironmentName}
+
+rules: []
