@@ -7,11 +7,9 @@ CfhighlanderTemplate do
     ComponentParam 'EnvironmentType', 'development', allowedValues: ['development','production'], isGlobal: true
     ComponentParam 'Scope', 'REGIONAL', allowedValues: ['REGIONAL','CLOUDFRONT']
 
-    rules.each do |rule|
-      if rule.has_key?('conditional')
-        if rule['conditional'] == true
-          ComponentParam "Enable#{rule['name']}Rule", 'true', allowedValues: ['true', 'false']
-        end
+    rules.each do |rule,properties|
+      if properties.dig('conditional') == true
+        ComponentParam "Enable#{rule['name']}Rule", 'true', allowedValues: ['true', 'false']
       end
     end
   end

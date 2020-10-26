@@ -14,3 +14,10 @@ blacklist_ipv4:
 
 blacklist_ipv6:
 - '2606:4700:4700::1001/128'
+
+rules:
+  IPSetWhitelist:
+    enabled: true
+    conditional: true
+  IPSetBlacklist:
+    enabled: true
