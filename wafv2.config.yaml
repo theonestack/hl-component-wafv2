@@ -7,7 +7,7 @@ rules:
   # =======================
   # IPSet Rules
   # =======================  
-  # Allow IPv4 and IPv6 IPSet
+  # Static IPv4 and IPv6 IPSet whitelist
   IPSetWhitelist:
     enabled: false
     conditional: false
@@ -23,7 +23,7 @@ rules:
         - IPSetReferenceStatement:
             Arn: 
               Fn::GetAtt: ['IPv6Whitelist', 'Arn']
-  # Block IPv4 and IPv6 IPSet
+  # Static IPv4 and IPv6 IPSet blacklist
   IPSetBlacklist:
     enabled: false
     conditional: false
