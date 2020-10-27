@@ -89,10 +89,6 @@ CloudFormation do
     end
   end
 
-  if waf_rules.length > 10
-    raise Exception.new "AWS rules (#{waf_rules.length}) for #{component_name} is greater than the allowed rules of 10"
-  end
-
   WAFv2_WebACL(:WAF) {
     Scope Ref(:Scope)
     VisibilityConfig({
