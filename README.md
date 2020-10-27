@@ -62,7 +62,7 @@ rules:
     priority: 25
     # specify the action, default action is to block
     action:
-      Black: {}
+      Block: {}
     # set the rule statement using the cloudformation waf rules syntax
     # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wafv2-webacl-statementone.html
     statement:
