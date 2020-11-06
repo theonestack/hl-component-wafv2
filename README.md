@@ -84,35 +84,35 @@ rules:
         Limit: 1000
 ```
 
-### Static IP White/Black Lists
+### IPSets
 
-to create static ip white and black lists use the following config
+to create static ip white and black lists use the following config:
+
+create the IPSet with an optional description. 
 
 ```yaml
-# enable the rules
-rules:
-  # whitelist
-  IPSetWhitelist:
-    enable: true
-  # blacklist
-  IPSetBlacklist:
-    enable: true
+ipsets:
+  Whitelist:
+    # optional
+    desc: ips to whitelist for my waf
+    addresses:
+    - 127.0.0.1/32
 ```
+the default ip version is `IPv4` but can be overridden to `IPv6` by setting the `version: IPv6`.
 
-2 IP sets are created for each rule, 1 each for IPv4 and IPv6.
-
-to add ips to the ip sets use the following config
+create a rule using the IPSet
 
 ```yaml
-whitelist_ipv4:
-- '1.1.1.1/32'
-
-whitelist_ipv6:
-- '2606:4700:4700::1111/128'
-
-blacklist_ipv4:
-- '1.0.0.1/32'
-
-blacklist_ipv6:
-- '2606:4700:4700::1001/128'
+rules:
+  IPWhitelistRule:
+    priority: 10
+    action:
+      Allow: {}
+    statement: 
+      OrStatement:
+        Statements:
+        - IPSetReferenceStatement:
+            Arn: 
+              # reference the ipset name in your config
+              Fn::GetAtt: ['Whitelist', 'Arn']
 ```

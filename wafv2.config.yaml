@@ -5,41 +5,6 @@ cloudwatch:
 
 rules:
   # =======================
-  # IPSet Rules
-  # =======================  
-  # Static IPv4 and IPv6 IPSet whitelist
-  IPSetWhitelist:
-    enabled: false
-    conditional: false
-    priority: 10
-    action:
-      Allow: {}
-    statement: 
-      OrStatement:
-        Statements:
-        - IPSetReferenceStatement:
-            Arn: 
-              Fn::GetAtt: ['IPv4Whitelist', 'Arn']
-        - IPSetReferenceStatement:
-            Arn: 
-              Fn::GetAtt: ['IPv6Whitelist', 'Arn']
-  # Static IPv4 and IPv6 IPSet blacklist
-  IPSetBlacklist:
-    enabled: false
-    conditional: false
-    priority: 20
-    action:
-      Block: {}
-    statement: 
-      OrStatement:
-        Statements:
-        - IPSetReferenceStatement:
-            Arn: 
-              Fn::GetAtt: ['IPv4Blacklist', 'Arn']
-        - IPSetReferenceStatement:
-            Arn: 
-              Fn::GetAtt: ['IPv6Blacklist', 'Arn']
-  # =======================
   # AWS managed rule groups https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-list.html
   # =======================
   # Contains rules that are generally applicable to web applications. This provides protection against exploitation 

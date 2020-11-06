@@ -6,37 +6,16 @@ CloudFormation do
   extra_tags = external_parameters.fetch(:extra_tags, {})
   extra_tags.each { |key,value| tags << { Key: FnSub(key), Value: FnSub(value) } }
 
-  WAFv2_IPSet(:IPv4Whitelist) {
-    Addresses external_parameters.fetch(:whitelist_ipv4, [])
-    Description FnSub("${EnvironmentName} IPv4 Whitelist")
-    IPAddressVersion 'IPV4'
-    Scope Ref(:Scope)
-    Tags tags
-  }
-
-  WAFv2_IPSet(:IPv6Whitelist) {
-    Addresses external_parameters.fetch(:whitelist_ipv6, [])
-    Description FnSub("${EnvironmentName} IPv6 Whitelist")
-    IPAddressVersion 'IPV6'
-    Scope Ref(:Scope)
-    Tags tags
-  }
-
-  WAFv2_IPSet(:IPv4Blacklist) {
-    Addresses external_parameters.fetch(:blacklist_ipv4, [])
-    Description FnSub("${EnvironmentName} IPv4 Blacklist")
-    IPAddressVersion 'IPV4'
-    Scope Ref(:Scope)
-    Tags tags
-  }
-
-  WAFv2_IPSet(:IPv6Blacklist) {
-    Addresses external_parameters.fetch(:blacklist_ipv6, [])
-    Description FnSub("${EnvironmentName} IPv4 Blacklist")
-    IPAddressVersion 'IPV6'
-    Scope Ref(:Scope)
-    Tags tags
-  }
+  ipsets.each do |name, properties|
+    WAFv2_IPSet(name) {
+      Name FnSub("${EnvironmentName}-#{name}")
+      Addresses properties.has_key?('addresses') ? properties['addresses'] : []
+      Description properties['desc'] if properties.has_key?('desc')
+      IPAddressVersion properties.has_key?('version') ? properties['version'] : 'IPv4'
+      Scope Ref(:Scope)
+      Tags tags
+    }
+  end
 
   waf_rules = []
   rules = external_parameters.fetch(:rules, {})
