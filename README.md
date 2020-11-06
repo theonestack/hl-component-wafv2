@@ -84,7 +84,7 @@ rules:
         Limit: 1000
 ```
 
-### IPSets
+### IP Sets
 
 to create static ip white and black lists use the following config:
 
@@ -115,4 +115,38 @@ rules:
             Arn: 
               # reference the ipset name in your config
               Fn::GetAtt: ['Whitelist', 'Arn']
+```
+
+### Regex Pattern Sets
+
+create the RegexPatternSet with an optional description specifying a list of regexes
+
+```yaml
+pattern_sets:
+  MyPattern:
+    desc: test pattern
+    regexes:
+    - '^[\w\-]+$'
+```
+
+create a rule using the RegexPatternSet
+
+```yaml
+rules:
+  Regex:
+    priority: 10
+    action:
+      Allow: {}
+    statement: 
+      RegexPatternSetReferenceStatement:
+        Arn:
+          # reference the pattern set name in your config
+          Fn::GetAtt: ['MyPattern', 'Arn']
+        # set the field amd transform properities acording to 
+        # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wafv2-webacl-fieldtomatch.html
+        FieldToMatch:
+          AllQueryArguments: {}
+        TextTransformations:
+          - Priority: 1
+            Type: NONE
 ```

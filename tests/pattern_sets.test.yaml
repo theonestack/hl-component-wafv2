@@ -1,0 +1,25 @@
+test_metadata:
+  type: config
+  name: pattern_sets
+  description: regular expression pattern set rules
+
+pattern_sets:
+  MyPattern:
+    desc: test pattern
+    regexes:
+    - '^[\w\-]+$'
+
+rules:
+  Regex:
+    priority: 10
+    action:
+      Allow: {}
+    statement: 
+      RegexPatternSetReferenceStatement:
+        Arn:
+          Fn::GetAtt: ['MyPattern', 'Arn']
+        FieldToMatch:
+          AllQueryArguments: {}
+        TextTransformations:
+          - Priority: 1
+            Type: NONE

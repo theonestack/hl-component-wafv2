@@ -4,10 +4,14 @@ test_metadata:
   description: IP white and black lists
 
 ipsets:
-  Whitelist:
+  WhitelistOne:
     desc: ips to whitelist for my waf
     addresses:
     - 127.0.0.1/32
+  WhitelistTwo:
+    desc: ips to whitelist for my waf
+    addresses:
+    - 169.168.0.1/32
 
 rules:
   IPWhitelistRule:
@@ -19,4 +23,7 @@ rules:
         Statements:
         - IPSetReferenceStatement:
             Arn: 
-              Fn::GetAtt: ['Whitelist', 'Arn']
+              Fn::GetAtt: ['WhitelistOne', 'Arn']
+        - IPSetReferenceStatement:
+            Arn: 
+              Fn::GetAtt: ['WhitelistTwo', 'Arn']

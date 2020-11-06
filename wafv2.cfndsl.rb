@@ -6,12 +6,24 @@ CloudFormation do
   extra_tags = external_parameters.fetch(:extra_tags, {})
   extra_tags.each { |key,value| tags << { Key: FnSub(key), Value: FnSub(value) } }
 
+  ipsets = external_parameters.fetch(:ipsets, [])
   ipsets.each do |name, properties|
     WAFv2_IPSet(name) {
       Name FnSub("${EnvironmentName}-#{name}")
       Addresses properties.has_key?('addresses') ? properties['addresses'] : []
       Description properties['desc'] if properties.has_key?('desc')
       IPAddressVersion properties.has_key?('version') ? properties['version'] : 'IPv4'
+      Scope Ref(:Scope)
+      Tags tags
+    }
+  end
+
+  pattern_sets = external_parameters.fetch(:pattern_sets, [])
+  pattern_sets.each do |name, properties|
+    WAFv2_RegexPatternSet(name) {
+      Description properties['desc'] if properties.has_key?('desc')
+      Name FnSub("${EnvironmentName}-#{name}")
+      RegularExpressionList properties['regexes']
       Scope Ref(:Scope)
       Tags tags
     }
