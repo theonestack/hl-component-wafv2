@@ -12,7 +12,7 @@ CloudFormation do
       Name FnSub("${EnvironmentName}-#{name}")
       Addresses properties.has_key?('addresses') ? properties['addresses'] : []
       Description properties['desc'] if properties.has_key?('desc')
-      IPAddressVersion properties.has_key?('version') ? properties['version'] : 'IPv4'
+      IPAddressVersion properties.has_key?('version') ? properties['version'] : 'IPV4'
       Scope Ref(:Scope)
       Tags tags
     }
