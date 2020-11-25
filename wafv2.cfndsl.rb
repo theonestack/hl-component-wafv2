@@ -81,6 +81,8 @@ CloudFormation do
   end
 
   WAFv2_WebACL(:WAF) {
+    Name FnSub("${EnvironmentName}-#{component_name}")
+    Description FnSub("#{component_name}")
     Scope Ref(:Scope)
     VisibilityConfig({
       SampledRequestsEnabled: cloudwatch['samples'],
