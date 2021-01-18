@@ -3,6 +3,8 @@ test_metadata:
   name: iplists
   description: IP white and black lists
 
+default_block: true
+
 ipsets:
   WhitelistOne:
     desc: ips to whitelist for my waf
