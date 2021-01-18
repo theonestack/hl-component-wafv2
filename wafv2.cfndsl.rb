@@ -80,6 +80,8 @@ CloudFormation do
     end
   end
 
+  default_block = external_parameters.fetch(:default_block, false)
+
   WAFv2_WebACL(:WAF) {
     Name FnSub("${EnvironmentName}-#{component_name}")
     Description FnSub("#{component_name}")
@@ -89,9 +91,7 @@ CloudFormation do
       CloudWatchMetricsEnabled: cloudwatch['enabled'],
       MetricName: FnSub("#{cloudwatch['metric_name_prefix']}WAFWebACL")
     })
-    DefaultAction({
-      Allow: {}
-    })
+    DefaultAction default_block ? ({Block: {}}) : ({Allow: {}})
     Rules(waf_rules)
   }
 
