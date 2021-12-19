@@ -1,9 +1,7 @@
 # wafv2 CfHighlander component
 
-```sh
-kurgan add wafv2
-```
-
+## Build status
+![cftest workflow](https://github.com/theonestack/hl-component-wafv2/actions/workflows/rspec.yaml/badge.svg)
 ## Parameters
 
 | Name | Use | Default | Global | Type | Allowed Values |
@@ -11,6 +9,48 @@ kurgan add wafv2
 | EnvironmentName | Tagging | dev | true | string
 | EnvironmentType | Tagging | development | true | string | development / production
 | Scope | Sets the AWS scope of the WebACL | REGIONAL | false | string | REGIONAL / CLOUDFRONT
+## Outputs/Exports
+
+| Name | Value | Exported |
+| ---- | ----- | -------- |
+| RestApiId | RestApiId | true
+| RestApiStage | RestApiStage | true
+
+## Included Components
+<none>
+
+## Example Configuration
+### Highlander
+```
+    Component name: 'wafv2', template: 'wafv2' do
+      parameter name: 'Scope', value: 'CLOUDFRONT'
+    end
+```
+### API Gateway (Rest) Configuration
+```
+rules:
+  AWSManagedRulesAmazonIpReputationList:
+    enabled: true
+  AWSManagedRulesKnownBadInputsRuleSet:
+    enabled: true
+  AWSManagedRulesSQLiRuleSet:
+    enabled: true
+  IPBlacklistRule:
+    enabled: true
+    priority: 10
+    action:
+      Block: {}
+    statement:
+      IPSetReferenceStatement:
+        Arn:
+          Fn::GetAtt: ['Blacklist', 'Arn']
+ipsets:
+  Blacklist:
+    desc: No more Google DNS
+    addresses:
+    - 8.8.8.8/32
+
+```
 
 ## Configuration
 
@@ -149,4 +189,25 @@ rules:
         TextTransformations:
           - Priority: 1
             Type: NONE
+```
+
+## Cfhighlander Setup
+
+install cfhighlander [gem](https://github.com/theonestack/cfhighlander)
+
+```bash
+gem install cfhighlander
+```
+
+or via docker
+
+```bash
+docker pull theonestack/cfhighlander
+```
+## Testing Components
+
+Running the tests
+
+```bash
+cfhighlander cftest wafv2
 ```
