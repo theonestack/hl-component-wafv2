@@ -52,6 +52,10 @@ CloudFormation do
       Statement: properties['statement']
     }
 
+    if properties.has_key?('name')
+      rule[:Name] = properties['name']
+    end
+
     if !properties.dig('action').nil?
       rule[:Action] = properties['action']
     elsif !properties.dig('override_action').nil?
