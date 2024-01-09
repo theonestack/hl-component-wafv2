@@ -9,7 +9,7 @@ CloudFormation do
   ipsets = external_parameters.fetch(:ipsets, [])
   ipsets.each do |name, properties|
     WAFv2_IPSet(name) {
-      Name FnSub("${EnvironmentName}-#{name}")
+      Name properties.has_key?('name') ? properties['name'] : FnSub("${EnvironmentName}-#{name}")
       Addresses properties.has_key?('addresses') ? properties['addresses'] : []
       Description properties['desc'] if properties.has_key?('desc')
       IPAddressVersion properties.has_key?('version') ? properties['version'] : 'IPV4'
@@ -81,9 +81,10 @@ CloudFormation do
   end
 
   default_block = external_parameters.fetch(:default_block, false)
+  webacl_name = external_parameters.fetch(:webacl_name, '')
 
   WAFv2_WebACL(:WAF) {
-    Name FnSub("${EnvironmentName}-#{component_name}")
+    Name webacl_name.empty? ? FnSub("${EnvironmentName}-#{component_name}") : webacl_name
     Description FnSub("#{component_name}")
     Scope Ref(:Scope)
     VisibilityConfig({
