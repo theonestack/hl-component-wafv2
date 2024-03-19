@@ -1,3 +1,4 @@
+#testray
 # wafv2 CfHighlander component
 
 ## Build status
