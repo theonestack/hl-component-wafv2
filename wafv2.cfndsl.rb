@@ -9,7 +9,7 @@ CloudFormation do
   ipsets = external_parameters.fetch(:ipsets, [])
   ipsets.each do |name, properties|
     WAFv2_IPSet(name) {
-      Name FnSub("${EnvironmentName}-#{name}")
+      Name FnJoin('-', [Ref('EnvironmentName'), name])
       Addresses properties.has_key?('addresses') ? properties['addresses'] : []
       Description properties['desc'] if properties.has_key?('desc')
       IPAddressVersion properties.has_key?('version') ? properties['version'] : 'IPV4'
@@ -22,7 +22,7 @@ CloudFormation do
   pattern_sets.each do |name, properties|
     WAFv2_RegexPatternSet(name) {
       Description properties['desc'] if properties.has_key?('desc')
-      Name FnSub("${EnvironmentName}-#{name}")
+      Name FnJoin('-', [Ref('EnvironmentName'), name])
       RegularExpressionList properties['regexes']
       Scope Ref(:Scope)
       Tags tags
@@ -83,7 +83,7 @@ CloudFormation do
   default_block = external_parameters.fetch(:default_block, false)
 
   WAFv2_WebACL(:WAF) {
-    Name FnSub("${EnvironmentName}-#{component_name}")
+    Name FnJoin('-', [Ref('EnvironmentName'), component_name])
     Description FnSub("#{component_name}")
     Scope Ref(:Scope)
     VisibilityConfig({
@@ -97,7 +97,7 @@ CloudFormation do
 
   Output(:WAFArn) {
     Value FnGetAtt(:WAF, :Arn)
-    Export FnSub("${EnvironmentName}-#{component_name}-waf-arn")
+    Export FnJoin('-', [Ref('EnvironmentName'), component_name, 'waf', 'arn'])
   }
 
 end
