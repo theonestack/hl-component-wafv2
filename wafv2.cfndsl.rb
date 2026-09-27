@@ -93,7 +93,7 @@ CloudFormation do
     })
     DefaultAction default_block ? ({Block: {}}) : ({Allow: {}})
     Rules(waf_rules)
-    TokenDomains FnIf(:HasTokenDomains, FnSplit(",", Ref("TokenDomains")), Ref("AWS::NoValue"))
+    TokenDomains FnIf(:HasTokenDomains, FnSplit(",", FnJoin("", FnSplit(" ", Ref("TokenDomains")))), Ref("AWS::NoValue"))
   }
 
   Output(:WAFArn) {
