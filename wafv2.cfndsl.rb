@@ -81,7 +81,7 @@ CloudFormation do
   end
 
   default_block = external_parameters.fetch(:default_block, false)
-
+  Condition(:HasTokenDomains, FnNot(FnEquals(Ref(:TokenDomains), "")))
   WAFv2_WebACL(:WAF) {
     Name FnJoin('-', [Ref('EnvironmentName'), component_name])
     Description FnSub("#{component_name}")
@@ -93,6 +93,7 @@ CloudFormation do
     })
     DefaultAction default_block ? ({Block: {}}) : ({Allow: {}})
     Rules(waf_rules)
+    TokenDomains FnIf(:HasTokenDomains, FnSplit(",", Ref("TokenDomains")), Ref("AWS::NoValue"))
   }
 
   Output(:WAFArn) {
