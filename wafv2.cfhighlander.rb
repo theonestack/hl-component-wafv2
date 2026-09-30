@@ -9,7 +9,7 @@ CfhighlanderTemplate do
 
     rules.each do |rule,properties|
       if properties.dig('conditional') == true
-        ComponentParam "Enable#{rule['name']}Rule", 'true', allowedValues: ['true', 'false']
+        ComponentParam "Enable#{rule}Rule", 'true', allowedValues: ['true', 'false']
       end
     end
   end
