@@ -73,7 +73,7 @@ CloudFormation do
     end
 
     if properties.dig('conditional') == true
-      Condition("#{name}Enabled", FnEquals("Enable#{name}Rule", 'true'))
+      Condition("#{name}Enabled", FnEquals(Ref("Enable#{name}Rule"), 'true'))
       waf_rules << FnIf("#{name}Enabled", rule, Ref('AWS::NoValue'))
     else
       waf_rules << rule

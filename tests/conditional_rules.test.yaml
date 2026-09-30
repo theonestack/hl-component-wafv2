@@ -1,0 +1,9 @@
+test_metadata:
+  type: config
+  name: conditional_rules
+  description: rules toggled at deploy time by a cloudformation parameter
+
+rules:
+  AWSManagedRulesSQLiRuleSet:
+    enabled: true
+    conditional: true
